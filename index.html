@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sana Bir Mektup Var...</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap');
+
+  body {
+    margin: 0; padding: 0;
+    background: radial-gradient(circle at center, #2e221b, #120d0a);
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh;
+    font-family: 'Caveat', cursive;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .envelope-container {
+    position: relative;
+    width: 400px;
+    height: 250px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  /* Envelope Base */
+  .envelope-back, .envelope-front, .envelope-bottom, .envelope-top, .seal {
+    transition: opacity 1s 1.2s ease;
+  }
+
+  .envelope-back {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: #c89f70; border-radius: 5px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+  }
+
+  /* Paper */
+  .paper {
+    position: absolute;
+    top: 10px; left: 20px;
+    width: 360px; height: 230px;
+    background: #f4ead5;
+    background-image: repeating-linear-gradient(transparent, transparent 32px, rgba(0,0,0,0.06) 33px);
+    border-radius: 3px;
+    padding: 45px 40px;
+    box-sizing: border-box;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 2;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .paper::-webkit-scrollbar { display: none; }
+
+  /* Flaps */
+  .envelope-front {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 3; pointer-events: none; border-radius: 5px; overflow: hidden;
+  }
+  .envelope-front::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    border-top: 125px solid transparent; border-bottom: 125px solid transparent;
+    border-left: 200px solid #d6af7e;
+  }
+  .envelope-front::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    border-top: 125px solid transparent; border-bottom: 125px solid transparent;
+    border-right: 200px solid #d6af7e;
+  }
+  
+  .envelope-bottom {
+    position: absolute; bottom: 0; left: 0;
+    border-left: 200px solid transparent; border-right: 200px solid transparent;
+    border-bottom: 140px solid #bc8f5d;
+    z-index: 4; pointer-events: none;
+    filter: drop-shadow(0 -4px 5px rgba(0,0,0,0.15));
+  }
+
+  .envelope-top {
+    position: absolute; top: 0; left: 0;
+    border-left: 200px solid transparent; border-right: 200px solid transparent;
+    border-top: 145px solid #c89f70;
+    transform-origin: top center;
+    transition: transform 0.6s 0.1s;
+    z-index: 5;
+    filter: drop-shadow(0 4px 5px rgba(0,0,0,0.2));
+  }
+
+  /* Wax Seal */
+  .seal {
+    position: absolute; top: 140px; left: 50%; transform: translate(-50%, -50%);
+    width: 60px; height: 60px; background: #8b0000; border-radius: 50%;
+    z-index: 6; box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 5px 10px rgba(0,0,0,0.5);
+    display: flex; justify-content: center; align-items: center;
+    color: #e09f3e; font-size: 30px; font-family: serif; font-style: italic;
+    border: 2px solid #5a0b0d; 
+    transition: transform 0.3s, opacity 0.3s;
+    cursor: pointer;
+  }
+  .seal:hover { transform: translate(-50%, -50%) scale(1.1); }
+
+  /* OPEN ANIMATION SEQUENCE */
+  .envelope-container.open .seal { opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  
+  .envelope-container.open .envelope-top {
+    transform: rotateX(180deg);
+    z-index: 1; 
+    transition: transform 0.6s, z-index 0s 0.6s;
+  }
+  
+  .envelope-container.open .paper {
+    animation: pullAndCenter 1.5s forwards ease-in-out;
+    animation-delay: 0.6s;
+    z-index: 10;
+  }
+  @keyframes pullAndCenter {
+    0% { top: 10px; left: 20px; width: 360px; height: 230px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+    40% { top: -250px; left: 20px; width: 360px; height: 230px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+    100% { top: -175px; left: -50px; width: 500px; height: 620px; box-shadow: 0 25px 50px rgba(0,0,0,0.8); }
+  }
+
+  .envelope-container.open .envelope-back,
+  .envelope-container.open .envelope-front,
+  .envelope-container.open .envelope-bottom,
+  .envelope-container.open .envelope-top {
+    opacity: 0;
+    transition: opacity 0.8s 1.2s ease;
+    pointer-events: none;
+  }
+
+  /* Text inside paper */
+  .text-content {
+    opacity: 0;
+    font-size: 25px;
+    line-height: 33px;
+    color: #3e2723;
+  }
+  .text-content p { margin: 0 0 33px 0; }
+  
+  .envelope-container.open .text-content {
+    animation: textFadeIn 1s forwards ease;
+    animation-delay: 2.1s;
+  }
+  @keyframes textFadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .instruction {
+    position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+    color: #d6af7e; font-family: sans-serif; font-size: 14px; letter-spacing: 1px;
+    animation: pulse 2s infinite; pointer-events: none; white-space: nowrap;
+  }
+  @keyframes pulse { 0%,100% {opacity: 0.5;} 50% {opacity: 1;} }
+  .envelope-container.open .instruction { display: none; }
+
+  /* PUZZLE OVERLAY (Premium Glassmorphism) */
+  .puzzle-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .puzzle-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  
+  .puzzle-box {
+    background: radial-gradient(circle at top left, rgba(62, 39, 35, 0.95), rgba(30, 17, 11, 0.98));
+    padding: 50px 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 163, 115, 0.2);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(212, 163, 115, 0.05);
+    text-align: center;
+    width: 350px;
+    transform: translateY(30px) scale(0.9);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #e6ccb2;
+  }
+  .puzzle-overlay.active .puzzle-box {
+    transform: translateY(0) scale(1);
+  }
+
+  .puzzle-step {
+    display: none;
+    animation: fadeInStep 0.4s ease;
+  }
+  .puzzle-step.active {
+    display: block;
+  }
+  @keyframes fadeInStep {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .puzzle-box h2 {
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #d4a373;
+    line-height: 1.2;
+  }
+  
+  .puzzle-box p.subtitle {
+    font-size: 18px;
+    color: #a68a6b;
+    margin-bottom: 30px;
+    font-family: sans-serif;
+    font-weight: 300;
+  }
+
+  .puzzle-box input {
+    width: 100%;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(212, 163, 115, 0.3);
+    border-radius: 8px;
+    color: #fefae0;
+    font-size: 26px;
+    font-family: 'Caveat', cursive;
+    text-align: center;
+    padding: 12px 0;
+    margin-bottom: 30px;
+    outline: none;
+    transition: all 0.3s;
+    box-sizing: border-box;
+  }
+  .puzzle-box input:focus {
+    border-color: #d4a373;
+    background: rgba(0,0,0,0.4);
+    box-shadow: 0 0 15px rgba(212, 163, 115, 0.2);
+  }
+
+  .puzzle-box button {
+    background: linear-gradient(135deg, #8b0000, #5a0b0d);
+    color: #fefae0;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 40px;
+    font-size: 22px;
+    font-family: 'Caveat', cursive;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: all 0.3s;
+    width: 100%;
+  }
+  .puzzle-box button:hover {
+    background: linear-gradient(135deg, #a50000, #7a0000);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 0, 0, 0.5);
+  }
+
+  .error-shake {
+    animation: shake 0.4s;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+  }
+
+  .success-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0); opacity: 0; }
+    80% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="envelope-container" id="envelope">
+  <div class="instruction">Mektubu açmak için mühre tıkla</div>
+  <div class="envelope-back"></div>
+  <div class="paper">
+    <div class="text-content">
+      <p>Merhaba, değerli dostum...</p>
+      <p>Taşkent ile İstanbul arasında binlerce kilometre mesafe olduğunu biliyorum. Ama bazen sana anlatmak istediğim o kadar çok şey oluyor ki, aradaki o mesafe birden yok olup gidiyor sanki.</p>
+      <p>Bugün nedense seni çok özledim. Birlikte attığımız kahkahaları, o uzun sohbetlerimizi hatırladım. Bu mektubu sana sadece şunu söylemek için yazıyorum: "Uzaklarda olsam da daima seninleyim."</p>
+      <p style="text-align: right; margin-top: 15px;">Kendine çok iyi bak. En kısa zamanda İstanbul sokaklarında ya da Taşkent'te yeniden görüşmek ümidiyle... ✨</p>
+    </div>
+  </div>
+  <div class="envelope-front"></div>
+  <div class="envelope-bottom"></div>
+  <div class="envelope-top"></div>
+  <div class="seal" onclick="startPuzzle()">M</div>
+</div>
+
+<!-- PREMIUM PUZZLE OVERLAY -->
+<div class="puzzle-overlay" id="puzzleOverlay">
+  <div class="puzzle-box">
+    
+    <!-- Step 1 -->
+    <div class="puzzle-step active" id="step1">
+      <h2>1. Soru</h2>
+      <p class="subtitle">Seninle nerede tanıştık?</p>
+      <input type="text" id="ans1" autocomplete="off" placeholder="Cevabınız...">
+      <button onclick="checkAnswer(1)">İleri</button>
+    </div>
+    
+    <!-- Step 2 -->
+    <div class="puzzle-step" id="step2">
+      <h2>2. Soru</h2>
+      <p class="subtitle">Sana hep söylediğim o kelime nedir?</p>
+      <input type="text" id="ans2" autocomplete="off" placeholder="Cevabınız...">
+      <button onclick="checkAnswer(2)">İleri</button>
+    </div>
+    
+    <!-- Step 3 -->
+    <div class="puzzle-step" id="step3">
+      <h2>3. Soru</h2>
+      <p class="subtitle">Benim adım ne?</p>
+      <input type="text" id="ans3" autocomplete="off" placeholder="Cevabınız...">
+      <button onclick="checkAnswer(3)">Mührü Kır</button>
+    </div>
+    
+    <!-- Success -->
+    <div class="puzzle-step" id="stepSuccess">
+      <div class="success-icon">✨</div>
+      <h2>Mühür Kırıldı!</h2>
+      <p class="subtitle" style="margin-bottom:0;">Mektup açılıyor...</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function startPuzzle() {
+    document.getElementById('puzzleOverlay').classList.add('active');
+    setTimeout(() => document.getElementById('ans1').focus(), 500);
+  }
+
+  function normalize(str) {
+    return str.toLowerCase().trim()
+      .replace(/ş/g, 's').replace(/ı/g, 'i')
+      .replace(/ç/g, 'c').replace(/ğ/g, 'g')
+      .replace(/ö/g, 'o').replace(/ü/g, 'u');
+  }
+
+  function checkAnswer(step) {
+    const ansInput = document.getElementById('ans' + step);
+    const val = normalize(ansInput.value);
+    let correct = false;
+
+    if (step === 1 && val === 'hellotalk') correct = true;
+    if (step === 2 && val === 'iyimis') correct = true;
+    if (step === 3 && val === 'numan') correct = true;
+
+    if (correct) {
+      document.getElementById('step' + step).classList.remove('active');
+      if (step < 3) {
+        document.getElementById('step' + (step + 1)).classList.add('active');
+        document.getElementById('ans' + (step + 1)).focus();
+      } else {
+        document.getElementById('stepSuccess').classList.add('active');
+        setTimeout(() => {
+          document.getElementById('puzzleOverlay').classList.remove('active');
+          document.getElementById('envelope').classList.add('open');
+        }, 1800);
+      }
+    } else {
+      const box = document.querySelector('.puzzle-box');
+      box.classList.add('error-shake');
+      setTimeout(() => box.classList.remove('error-shake'), 400);
+      ansInput.value = '';
+      ansInput.focus();
+    }
+  }
+
+  // Enter key support
+  [1, 2, 3].forEach(i => {
+    document.getElementById('ans' + i).addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') checkAnswer(i);
+    });
+  });
+</script>
+
+</body>
+</html>
