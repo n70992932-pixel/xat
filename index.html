@@ -345,7 +345,7 @@
   }
 
   function normalize(str) {
-    return str.toLowerCase().trim()
+    return str.toLocaleLowerCase('tr-TR').trim()
       .replace(/ş/g, 's').replace(/ı/g, 'i')
       .replace(/ç/g, 'c').replace(/ğ/g, 'g')
       .replace(/ö/g, 'o').replace(/ü/g, 'u');
@@ -353,11 +353,12 @@
 
   function checkAnswer(step) {
     const ansInput = document.getElementById('ans' + step);
-    const val = normalize(ansInput.value);
+    const rawVal = ansInput.value.toLocaleLowerCase('tr-TR').trim();
+    const val = normalize(rawVal);
     let correct = false;
 
     if (step === 1 && val === 'hellotalk') correct = true;
-    if (step === 2 && val === 'iyimis') correct = true;
+    if (step === 2 && (val === 'iyimis' || rawVal === 'iyimiş' || rawVal === 'iyimis')) correct = true;
     if (step === 3 && val === 'numan') correct = true;
 
     if (correct) {
