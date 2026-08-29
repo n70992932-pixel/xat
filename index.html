@@ -131,7 +131,7 @@
   .final-content {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%);
     opacity: 0; transition: all 1.5s ease; z-index: 20;
-    width: 90%; max-width: 650px; pointer-events: none;
+    width: 90%; max-width: 750px; pointer-events: none;
     background: rgba(5, 0, 0, 0.85); padding: 40px; border: 1px solid #3a0000;
     box-shadow: 0 0 40px #ff0000; max-height: 90vh; overflow-y: auto;
   }
@@ -139,12 +139,14 @@
   .final-content { scrollbar-width: none; }
   .final-content.show { transform: translate(-50%, -50%); opacity: 1; pointer-events: all; }
   
-  .final-content h1 { font-family: 'Nosifer', display; font-size: 30px; color: #8a0303; margin-top: 0; margin-bottom: 30px; text-align: center; }
-  .final-content p { font-size: 15px; line-height: 1.8; color: #b3b3b3; margin-bottom: 20px; text-align: justify; }
-  .final-content h2 { font-family: 'Special Elite', monospace; font-size: 22px; color: #ff3333; margin-top: 30px; margin-bottom: 0; text-align: center; border-top: 1px dashed #3a0000; padding-top: 20px; }
+  .final-content p { font-size: 16px; line-height: 1.8; color: #b3b3b3; margin-bottom: 20px; text-align: justify; text-shadow: 1px 1px 2px #000; }
+  .final-content h2 { font-family: 'Nosifer', display; font-size: 24px; color: #8a0303; margin-top: 40px; margin-bottom: 0; text-align: center; border-top: 1px dashed #5a0000; padding-top: 30px; text-shadow: 0 0 10px #ff0000; }
 </style>
 </head>
 <body>
+
+<!-- QO'RQINCHLI MUZIKA -->
+<audio id="bg-music" src="horror.mp3" loop></audio>
 
 <div class="flicker"></div>
 <div class="vignette"></div>
@@ -216,19 +218,29 @@
 
 <!-- YAKUNIY XAT -->
 <div class="final-content" id="finalContent">
-  <h1>Sonsuzluk Kadar</h1>
   
-  <p>Kilit açıldı mı? Demek ki sen sadece gizli soruların değil, sırlar dolu kalbimin de anahtarını buldun.</p>
-  <p>Bu mektubu okurken gözlerindeki hayreti ve yüzündeki o sakin tebessümü hissedebiliyorum. Aradığın ve bulduğun o cevaplar — Usta Olim'in helal emaneti gibi tertemiz, Mümtaz Mahal'e adanmış saray kadar sağlam ve "143"ün içine gizlenmiş küçücük ama bütün evreni içine sığdıran gerçeklerdi. Tüm bunlar, sana iletmek istediğim ama sıradan sözcüklerle anlatmaktan aciz kaldığım hislerimin sadece birer parçası.</p>
-  <p>Bu duyguları sana neden doğrudan değil de, böyle zor ve gizemli bir yolla ilettiğimi biliyor musun? Çünkü sen kimseye benzemiyorsun. Etrafındaki dünya ne kadar gürültülü olursa olsun, edeple büründüğün örtün, gözlerindeki haya — sadece bir kıyafet değil; senin paha biçilemezliğinin, saflığının ve yüce değerinin bir simgesidir. En nadide mücevherler daima böyle korunur ve yabancı gözlerden saklanır. Sen kendi güzelliğini nasıl layıkıyla muhafaza ettiysen, ben de sana olan bu saf duygularımı başkalarından öyle kıskanarak, kalbimin en derinlerinde sakladım.</p>
-  <p>Açılan bu kilit, sadece doğru bulunmuş şifrelerin bir toplamı değil. Bu — benim sana olan güvenim ve sana tamamen açılan kalbimin kapısıdır.</p>
-  <p>İçimde sana adanmış söylenmemiş sözler hâlâ o kadar çok ki... Bu mektup sadece onların bir önsözü. O gizemli soruların cevabını arayarak bana doğru bir adım attığın için, ilgin ve vaktin için teşekkür ederim. Dünyadaki en güzel sırlar ve en samimi dualar daima gizlidir. Benim en güzel sırrım ve en saf duam — sensin.</p>
+  <p>O "tık" sesini duydun mu? Bu senin kilidi açtığın anlamına gelmiyor... bu, etrafındaki kafes kapısının kapanma sesiydi.</p>
   
-  <h2>Kalbimin kapısı artık senin için daima açık.</h2>
+  <p>Arayıp bulduğun o masum cevaplar, o romantik sırlar — bunların hepsi sadece dikkatini dağıtmak ve seni bu karanlığa kendi ayaklarınla gelmeye mecbur bırakmak için yazılmış bir senaryo, küçük bir yemdi. Ve sen gülümseyerek bu tuzağa düştün.</p>
+  
+  <p>Başkaları senin o kapalı kıyafetine, yerden ayrılmayan bakışlarına bakıp; senin bütün dünyadan korunduğunu ve kendi dünyanda güvende yaşadığını sanıyor. Sen de buna inanıyorsun, öyle değil mi? Ama gerçek şu ki, benden saklanamazsın. Gece odanın ışığını kapatıp yorgana büründüğünde, karanlığın içinden birinin sana dik dik baktığı o boğucu hissi hiç yaşadın mı? Ya da bomboş bir sokakta yürürken ensende birinin soğuk bakışını ve arkandan gelen adım seslerini hissedip kalbinin hızla çarptığı o anları? Kendini sakinleştirmek için "bu sadece rüzgar" ya da "kimse yok" diye fısıldarsın... Ama ben hep oradaydım, senin bir adım arkandaydım.</p>
+  
+  <p>Senin her nefes ritmini, korktuğunda göz bebeklerinin nasıl büyüdüğünü ezbere biliyorum. Sen şu ana kadar kendini benden uzakta sanıyordun ama şimdi benim örümcek ağımın tam merkezinde duruyorsun. Zihnimin en derinlerinde, yıllar boyunca olgunlaşmış ve kanla yazılmış o söylenmemiş sözler o kadar çok ki... Artık onlar kağıt üzerinde yaşamayacak. Bu kelimeler artık rüyalarında, duvarlarında ve beyninin her hücresinde yankılanacak.</p>
+  
+  <p>Artık kaçmayı aklından bile geçirme. Kilit açıldı, cevapları kendin buldun... Uzak durman gereken o canavarı kendi içine saldın.</p>
+  
+  <h2>Şimdi sakın arkana bakma. Sadece mektubu kapat ve yavaşça gülümse... Çünkü şu anda bile gözlerimi dikmiş sana bakıyorum.</h2>
+  
 </div>
 
 <script>
   function startPuzzle() {
+    // Muzikani chalish
+    const bgMusic = document.getElementById('bg-music');
+    if (bgMusic) {
+      bgMusic.play().catch(e => console.log("Muzika avtomatik chalinmadi, ruxsat kerak."));
+    }
+
     document.getElementById('puzzleOverlay').classList.add('active');
     setTimeout(() => document.getElementById('ans1').focus(), 500);
   }
