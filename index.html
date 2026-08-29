@@ -258,7 +258,9 @@
     const val = normalize(rawVal);
     let correct = false;
 
-    if (step === 1 && (val === 'usta olim' || val === 'ustaolim')) correct = true;
+    // "usta olim", "ustaolim", "usta alim", "ustaalim" qabul qilinadi
+    if (step === 1 && (val === 'usta olim' || val === 'ustaolim' || val === 'usta alim' || val === 'ustaalim')) correct = true;
+    
     if (step === 2 && (val === 'kirmizi kusak' || val === 'kirmizi')) correct = true;
     if (step === 3 && (val === 'mumtaz mahal' || val === 'mumtaz')) correct = true;
     if (step === 4 && (val === 'unutma beni' || val === 'unutmabeni')) correct = true;
