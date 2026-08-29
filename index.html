@@ -3,165 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sana Bir Mektup Var...</title>
+<title>Sana Bir Mesaj Var...</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Montserrat:wght@300;400;600&display=swap');
 
   body {
     margin: 0; padding: 0;
-    background: radial-gradient(circle at center, #2e221b, #120d0a);
-    display: flex; justify-content: center; align-items: center;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    overflow: hidden;
     height: 100vh;
-    font-family: 'Caveat', cursive;
-    overflow-y: auto;
-    overflow-x: hidden;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
   }
 
-  .envelope-container {
-    position: relative;
-    width: 400px;
-    height: 250px;
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
-
-  /* Envelope Base */
-  .envelope-back, .envelope-front, .envelope-bottom, .envelope-top, .seal {
-    transition: opacity 1s 1.2s ease;
-  }
-
-  .envelope-back {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: #c89f70; border-radius: 5px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-  }
-
-  /* Paper */
-  .paper {
+  /* Yulduzlar Konteyneri */
+  #stars-container {
     position: absolute;
-    top: 10px; left: 20px;
-    width: 360px; height: 230px;
-    background: #f4ead5;
-    background-image: repeating-linear-gradient(transparent, transparent 32px, rgba(0,0,0,0.06) 33px);
-    border-radius: 3px;
-    padding: 45px 40px;
-    box-sizing: border-box;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    z-index: 2;
-    overflow-y: auto;
-    scrollbar-width: none;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
   }
-  .paper::-webkit-scrollbar { display: none; }
-
-  /* Flaps */
-  .envelope-front {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 3; pointer-events: none; border-radius: 5px; overflow: hidden;
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle infinite ease-in-out;
   }
-  .envelope-front::before {
-    content: ''; position: absolute; top: 0; left: 0;
-    border-top: 125px solid transparent; border-bottom: 125px solid transparent;
-    border-left: 200px solid #d6af7e;
-  }
-  .envelope-front::after {
-    content: ''; position: absolute; top: 0; right: 0;
-    border-top: 125px solid transparent; border-bottom: 125px solid transparent;
-    border-right: 200px solid #d6af7e;
-  }
-  
-  .envelope-bottom {
-    position: absolute; bottom: 0; left: 0;
-    border-left: 200px solid transparent; border-right: 200px solid transparent;
-    border-bottom: 140px solid #bc8f5d;
-    z-index: 4; pointer-events: none;
-    filter: drop-shadow(0 -4px 5px rgba(0,0,0,0.15));
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.1; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 5px #fff; }
   }
 
-  .envelope-top {
-    position: absolute; top: 0; left: 0;
-    border-left: 200px solid transparent; border-right: 200px solid transparent;
-    border-top: 145px solid #c89f70;
-    transform-origin: top center;
-    transition: transform 0.6s 0.1s;
-    z-index: 5;
-    filter: drop-shadow(0 4px 5px rgba(0,0,0,0.2));
+  .shooting-star {
+    position: absolute;
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,1), transparent);
+    animation: shoot linear infinite;
+    opacity: 0;
+    transform: rotate(-45deg);
+  }
+  @keyframes shoot {
+    0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
+    20% { transform: translateX(-500px) translateY(500px) rotate(-45deg); opacity: 0; }
+    100% { opacity: 0; }
   }
 
-  /* Wax Seal */
-  .seal {
-    position: absolute; top: 140px; left: 50%; transform: translate(-50%, -50%);
-    width: 60px; height: 60px; background: #8b0000; border-radius: 50%;
-    z-index: 6; box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 5px 10px rgba(0,0,0,0.5);
-    display: flex; justify-content: center; align-items: center;
-    color: #e09f3e; font-size: 30px; font-family: serif; font-style: italic;
-    border: 2px solid #5a0b0d; 
-    transition: transform 0.3s, opacity 0.3s;
+  /* Asosiy Katta Yulduz */
+  .center-star-container {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
     cursor: pointer;
   }
-  .seal:hover { transform: translate(-50%, -50%) scale(1.1); }
-
-  /* OPEN ANIMATION SEQUENCE */
-  .envelope-container.open .seal { opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-  
-  .envelope-container.open .envelope-top {
-    transform: rotateX(180deg);
-    z-index: 1; 
-    transition: transform 0.6s, z-index 0s 0.6s;
+  .center-star {
+    width: 60px; height: 60px;
+    background: radial-gradient(circle, #fff, #f39c12, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 40px #fff, 0 0 80px #f39c12, 0 0 150px #f39c12;
+    animation: pulseStar 2.5s infinite alternate;
+    margin: 0 auto;
   }
-  
-  .envelope-container.open .paper {
-    animation: pullAndCenter 1.5s forwards ease-in-out;
-    animation-delay: 0.6s;
-    z-index: 10;
+  @keyframes pulseStar {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 60px #fff, 0 0 120px #f39c12, 0 0 200px #f39c12; }
   }
-  @keyframes pullAndCenter {
-    0% { top: 10px; left: 20px; width: 360px; height: 230px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-    40% { top: -250px; left: 20px; width: 360px; height: 230px; box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
-    100% { top: -175px; left: -50px; width: 500px; height: 620px; box-shadow: 0 25px 50px rgba(0,0,0,0.8); }
+  .center-text {
+    margin-top: 25px;
+    font-family: 'Caveat', cursive;
+    font-size: 30px;
+    color: #f1c40f;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px #f39c12;
+    animation: fadeInOut 3s infinite;
   }
-
-  .envelope-container.open .envelope-back,
-  .envelope-container.open .envelope-front,
-  .envelope-container.open .envelope-bottom,
-  .envelope-container.open .envelope-top {
-    opacity: 0;
-    transition: opacity 0.8s 1.2s ease;
-    pointer-events: none;
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
   }
 
-  /* Text inside paper */
-  .text-content {
-    opacity: 0;
-    font-size: 25px;
-    line-height: 33px;
-    color: #3e2723;
-  }
-  .text-content p { margin: 0 0 33px 0; }
-  
-  .envelope-container.open .text-content {
-    animation: textFadeIn 1s forwards ease;
-    animation-delay: 2.1s;
-  }
-  @keyframes textFadeIn {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-
-  .instruction {
-    position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
-    color: #d6af7e; font-family: sans-serif; font-size: 14px; letter-spacing: 1px;
-    animation: pulse 2s infinite; pointer-events: none; white-space: nowrap;
-  }
-  @keyframes pulse { 0%,100% {opacity: 0.5;} 50% {opacity: 1;} }
-  .envelope-container.open .instruction { display: none; }
-
-  /* PUZZLE OVERLAY (Premium Glassmorphism) */
+  /* SAVOLLAR OYNASI (Glassmorphism) */
   .puzzle-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex; justify-content: center; align-items: center;
     z-index: 100;
     opacity: 0;
@@ -172,96 +102,57 @@
     opacity: 1;
     pointer-events: all;
   }
-  
   .puzzle-box {
-    background: radial-gradient(circle at top left, rgba(62, 39, 35, 0.95), rgba(30, 17, 11, 0.98));
-    padding: 50px 40px;
+    background: rgba(20, 25, 40, 0.8);
+    padding: 40px;
     border-radius: 20px;
-    border: 1px solid rgba(212, 163, 115, 0.2);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(212, 163, 115, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(241, 196, 15, 0.1);
     text-align: center;
-    width: 350px;
+    width: 90%;
+    max-width: 500px;
     transform: translateY(30px) scale(0.9);
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    color: #e6ccb2;
+    color: #ecf0f1;
   }
   .puzzle-overlay.active .puzzle-box {
     transform: translateY(0) scale(1);
   }
 
-  .puzzle-step {
-    display: none;
-    animation: fadeInStep 0.4s ease;
-  }
-  .puzzle-step.active {
-    display: block;
-  }
+  .puzzle-step { display: none; animation: fadeInStep 0.4s ease; }
+  .puzzle-step.active { display: block; }
   @keyframes fadeInStep {
     0% { opacity: 0; transform: translateY(10px); }
     100% { opacity: 1; transform: translateY(0); }
   }
 
   .puzzle-box h2 {
-    font-size: 28px;
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: #d4a373;
-    line-height: 1.2;
+    font-size: 26px; color: #f1c40f; margin-top: 0; margin-bottom: 15px; font-weight: 600;
   }
-  
+  .puzzle-box h3 {
+    font-size: 16px; color: #3498db; margin-top: 0; margin-bottom: 10px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase;
+  }
   .puzzle-box p.subtitle {
-    font-size: 18px;
-    color: #a68a6b;
-    margin-bottom: 30px;
-    font-family: sans-serif;
-    font-weight: 300;
+    font-size: 17px; color: #bdc3c7; margin-bottom: 25px; font-weight: 300; line-height: 1.5;
   }
-
   .puzzle-box input {
-    width: 100%;
-    background: rgba(0,0,0,0.2);
-    border: 1px solid rgba(212, 163, 115, 0.3);
-    border-radius: 8px;
-    color: #fefae0;
-    font-size: 26px;
-    font-family: 'Caveat', cursive;
-    text-align: center;
-    padding: 12px 0;
-    margin-bottom: 30px;
-    outline: none;
-    transition: all 0.3s;
-    box-sizing: border-box;
+    width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
+    color: #fff; font-size: 22px; font-family: 'Caveat', cursive; text-align: center;
+    padding: 12px 0; margin-bottom: 25px; outline: none; transition: all 0.3s; box-sizing: border-box;
   }
   .puzzle-box input:focus {
-    border-color: #d4a373;
-    background: rgba(0,0,0,0.4);
-    box-shadow: 0 0 15px rgba(212, 163, 115, 0.2);
+    border-color: #f1c40f; box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
   }
-
   .puzzle-box button {
-    background: linear-gradient(135deg, #8b0000, #5a0b0d);
-    color: #fefae0;
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 12px 40px;
-    font-size: 22px;
-    font-family: 'Caveat', cursive;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    transition: all 0.3s;
-    width: 100%;
+    background: linear-gradient(135deg, #2980b9, #2c3e50); color: #fff; border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 30px; font-size: 18px; font-family: 'Montserrat', sans-serif; font-weight: 600; border-radius: 30px;
+    cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.3s; width: 100%;
   }
   .puzzle-box button:hover {
-    background: linear-gradient(135deg, #a50000, #7a0000);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(139, 0, 0, 0.5);
+    background: linear-gradient(135deg, #3498db, #34495e); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(52, 152, 219, 0.5);
   }
 
-  .error-shake {
-    animation: shake 0.4s;
-  }
+  .error-shake { animation: shake 0.4s; }
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-10px); }
@@ -269,87 +160,147 @@
     75% { transform: translateX(-10px); }
   }
 
-  .success-icon {
-    font-size: 60px;
-    margin-bottom: 20px;
-    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  /* YAKUNIY XAT VA VIDEO KONTEYNERI */
+  .final-content {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -40%);
+    opacity: 0; text-align: center; transition: all 2s ease; z-index: 20;
+    width: 90%; max-width: 650px; pointer-events: none;
+    background: rgba(10, 15, 25, 0.7);
+    padding: 40px; border-radius: 20px; backdrop-filter: blur(8px);
+    box-shadow: 0 0 50px rgba(241, 196, 15, 0.15);
+    border: 1px solid rgba(241, 196, 15, 0.2);
+    max-height: 90vh; overflow-y: auto;
   }
-  @keyframes popIn {
-    0% { transform: scale(0); opacity: 0; }
-    80% { transform: scale(1.2); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
+  
+  /* Scrollbar yashirish */
+  .final-content::-webkit-scrollbar { display: none; }
+  .final-content { scrollbar-width: none; }
+
+  .final-content.show {
+    transform: translate(-50%, -50%); opacity: 1; pointer-events: all;
+  }
+  .final-content h1 {
+    font-family: 'Caveat', cursive; font-size: 45px; color: #f1c40f; margin-top: 0; margin-bottom: 20px;
+  }
+  .final-content p {
+    font-family: 'Caveat', cursive; font-size: 26px; line-height: 1.5; color: #ecf0f1; margin-bottom: 20px;
+  }
+  .video-container {
+    width: 100%; margin-top: 20px; border-radius: 10px; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
 </style>
 </head>
 <body>
 
-<div class="envelope-container" id="envelope">
-  <div class="instruction">Mektubu açmak için mühre tıkla</div>
-  <div class="envelope-back"></div>
-  <div class="paper">
-    <div class="text-content">
-      <div style="text-align: center; margin-bottom: 30px;">
-        <video src="video.mp4" controls style="width: 100%; max-height: 250px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); outline: none;"></video>
-      </div>
-      
-      <h3 style="font-size: 26px; color: #8b0000; margin-top: 0; margin-bottom: 20px; text-align: center; font-weight: 700;">Özbekçe Hakkında İlginç ve Merak Uyandırıcı Gerçekler</h3>
-      
-      <p style="font-size: 21px; line-height: 28px; margin-bottom: 20px;"><strong>Klasik Çağatay Edebiyatının Doğrudan Mirasçısı:</strong> Özbekçe, Türk dillerinin Karluk koluna aittir. Ali Şîr Nevâî ve Bâbür Şah gibi Doğu Türk edebiyatının dev isimlerinin yazdığı klasik Çağataycanın yaşayan en güçlü ve doğrudan devamıdır.</p>
-      
-      <p style="font-size: 21px; line-height: 28px; margin-bottom: 20px;"><strong>Farklı Bir Melodi (Ünlü Uyumunun Esnekliği):</strong> Çoğu Türk dilinin temel kuralı olan sert "büyük ünlü uyumu", Farsça ve Tacikçe ile yüzyıllar süren kültürel etkileşim (özellikle Taşkent ve Semerkant ağızları) sebebiyle standart Özbekçede zayıflamıştır. Bu durum dile kendine has, yumuşak ve melodik bir ritim kazandırır.</p>
-      
-      <p style="font-size: 21px; line-height: 28px; margin-bottom: 20px;"><strong>Orta Asya'nın En Çok Konuşulan Türk Dili:</strong> Özbekistan başta olmak üzere Afganistan, Tacikistan, Kırgızistan ve Kazakistan genelinde 35 milyondan fazla insan tarafından konuşulur. Orta Asya'yı, İpek Yolu tarihini ve bölge ticaretini anlamak için en stratejik anahtar dildir.</p>
-      
-      <p style="font-size: 21px; line-height: 28px; margin-bottom: 20px;"><strong>İpek Yolu Kelime Hazinesi:</strong> Türk dilleri arasındaki ortak köklerin yanı sıra kadim İpek Yolu medeniyetlerinin (özellikle Doğu felsefesi, mimari ve astronomi) zengin kavram dünyasını barındırır. Türkiye Türkçesi konuşan biri için temel yapılar hızla çözülürken, kelime zenginliği edebiyat tutkunlarına derin bir alan açar.</p>
-      
-      <p style="font-size: 21px; line-height: 28px; margin-bottom: 30px;"><strong>Hızlı Öğrenme Avantajı:</strong> Cümle dizilimi (Özne - Nesne - Yüklem), eklemeli morfolojik yapısı ve temel eylemleri Türkiye Türkçesi ile neredeyse birebir örtüşür. Düzenli bir çalışmayla birkaç ay içinde akıcı şekilde metin okuma ve temel konuşma seviyesine ulaşmak mümkündür.</p>
-    </div>
-  </div>
-  <div class="envelope-front"></div>
-  <div class="envelope-bottom"></div>
-  <div class="envelope-top"></div>
-  <div class="seal" onclick="startPuzzle()">M</div>
+<div id="stars-container"></div>
+
+<!-- Asosiy Yulduz -->
+<div class="center-star-container" id="centerStar" onclick="startPuzzle()">
+  <div class="center-star"></div>
+  <div class="center-text">Bana Dokun</div>
 </div>
 
-<!-- PREMIUM PUZZLE OVERLAY -->
+<!-- SAVOLLAR OYNASI -->
 <div class="puzzle-overlay" id="puzzleOverlay">
   <div class="puzzle-box">
     
-    <!-- Step 1 -->
+    <!-- 1 -->
     <div class="puzzle-step active" id="step1">
-      <h2>1. Soru</h2>
-      <p class="subtitle">Seninle nerede tanıştık?</p>
-      <input type="text" id="ans1" autocomplete="off" placeholder="Cevabınız...">
+      <h3>1. Soru</h3>
+      <h2>Kanıt ve Kurtuluş</h2>
+      <p class="subtitle">Otabek’in masumiyetini, ona yapılan ihaneti ve Kumush’a olan gerçek aşkını kanıtlayan en önemli mektup, güvenilir bir kişi aracılığıyla Kutidor’un avlusuna bırakılır. Bu mektubu ulaştıran kişi kimdi?</p>
+      <input type="text" id="ans1" autocomplete="off" placeholder="Cevap...">
       <button onclick="checkAnswer(1)">İleri</button>
     </div>
     
-    <!-- Step 2 -->
+    <!-- 2 -->
     <div class="puzzle-step" id="step2">
-      <h2>2. Soru</h2>
-      <p class="subtitle">Sana hep söylediğim o kelime nedir?</p>
-      <input type="text" id="ans2" autocomplete="off" placeholder="Cevabınız...">
+      <h3>2. Soru</h3>
+      <h2>Detay ve Dikkat</h2>
+      <p class="subtitle">George Orwell’in "1984" adlı eserinde Julia, dikkat çekmek ve isyankar aşkını ifade etmek için beline her zaman ne renk bir kuşak takardı?</p>
+      <input type="text" id="ans2" autocomplete="off" placeholder="Cevap...">
       <button onclick="checkAnswer(2)">İleri</button>
     </div>
     
-    <!-- Step 3 -->
+    <!-- 3 -->
     <div class="puzzle-step" id="step3">
-      <h2>3. Soru</h2>
-      <p class="subtitle">Benim adım ne?</p>
-      <input type="text" id="ans3" autocomplete="off" placeholder="Cevabınız...">
-      <button onclick="checkAnswer(3)">Mührü Kır</button>
+      <h3>3. Soru</h3>
+      <h2>Mimari ve Tarih</h2>
+      <p class="subtitle">Dünyanın en muhteşem aşk sarayı Tac Mahal olarak kabul edilir. Onu inşa ettiren şah, hangi kadının adını ölümsüzleştirmek için bu işe kalkışmıştı?</p>
+      <input type="text" id="ans3" autocomplete="off" placeholder="Cevap...">
+      <button onclick="checkAnswer(3)">İleri</button>
+    </div>
+
+    <!-- 4 -->
+    <div class="puzzle-step" id="step4">
+      <h3>4. Soru</h3>
+      <h2>Botanik Sembol</h2>
+      <p class="subtitle">Doğada öyle küçük, mavi renkli bir çiçek vardır ki, İngilizce adı "Forget-me-not" olarak bilinir. Bu çiçeğin doğrudan çevirisi, sana söylemek istediğim son sözdür. Bu çiçek Türkçede nasıl adlandırılır?</p>
+      <input type="text" id="ans4" autocomplete="off" placeholder="Cevap...">
+      <button onclick="checkAnswer(4)">İleri</button>
+    </div>
+
+    <!-- 5 -->
+    <div class="puzzle-step" id="step5">
+      <h3>5. Soru</h3>
+      <h2>Dijital Şifre</h2>
+      <p class="subtitle">90'lı yıllarda aşıklar birbirlerine kısa mesaj yoluyla "143" kodunu gönderirlerdi. Harf sayısına gizlenmiş bu üç kelime neydi?</p>
+      <input type="text" id="ans5" autocomplete="off" placeholder="Cevap...">
+      <button onclick="checkAnswer(5)">Sırrı Çöz</button>
     </div>
     
     <!-- Success -->
     <div class="puzzle-step" id="stepSuccess">
-      <div class="success-icon">✨</div>
-      <h2>Mühür Kırıldı!</h2>
-      <p class="subtitle" style="margin-bottom:0;">Mektup açılıyor...</p>
+      <h1 style="font-size: 50px; margin:0;">🌌</h1>
+      <h2>Yıldızlar Kapısı Açılıyor...</h2>
+      <p class="subtitle" style="margin-bottom:0;">Lütfen bekleyin.</p>
     </div>
 
   </div>
 </div>
 
+<!-- YAKUNIY XAT VA VIDEO -->
+<div class="final-content" id="finalContent">
+  <h1>Sonsuzluk Kadar...</h1>
+  <p>Tüm soruları doğru bildin! Tıpkı bu gökyüzündeki yıldızlar gibi, sana olan hislerim ve kelimelerim de sonsuz ve parlak.</p>
+  <p><em>(Bu alana istediğiniz xat yoki matnni yozishingiz mumkin. Kodingizni edit qilganda aynan shu yozuvlarni topib o'zgartirasiz).</em></p>
+  
+  <div class="video-container">
+    <video src="video.mp4" controls style="width: 100%; outline: none; border-radius: 10px;"></video>
+  </div>
+</div>
+
 <script>
+  // Yulduzlar yaratish funksiyasi
+  function createStars() {
+    const container = document.getElementById('stars-container');
+    const starCount = 150;
+    for (let i = 0; i < starCount; i++) {
+      let star = document.createElement('div');
+      star.className = 'star';
+      let size = Math.random() * 3 + 1;
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.top = Math.random() * 100 + 'vh';
+      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      star.style.animationDelay = (Math.random() * 2) + 's';
+      container.appendChild(star);
+    }
+    // Oqar yulduzlar
+    setInterval(() => {
+      let shoot = document.createElement('div');
+      shoot.className = 'shooting-star';
+      shoot.style.top = (Math.random() * 50) + 'vh';
+      shoot.style.left = (Math.random() * 80 + 20) + 'vw';
+      shoot.style.animationDuration = (Math.random() * 1.5 + 1) + 's';
+      container.appendChild(shoot);
+      setTimeout(() => shoot.remove(), 3000);
+    }, 4000);
+  }
+  createStars();
+
   function startPuzzle() {
     document.getElementById('puzzleOverlay').classList.add('active');
     setTimeout(() => document.getElementById('ans1').focus(), 500);
@@ -368,21 +319,20 @@
     const val = normalize(rawVal);
     let correct = false;
 
-    if (step === 1 && val === 'hellotalk') correct = true;
-    if (step === 2 && (val === 'iyimis' || rawVal === 'iyimiş' || rawVal === 'iyimis')) correct = true;
-    if (step === 3 && val === 'numan') correct = true;
+    if (step === 1 && (val === 'usta olim' || val === 'ustaolim')) correct = true;
+    if (step === 2 && (val === 'kirmizi kusak' || val === 'kirmizi')) correct = true;
+    if (step === 3 && (val === 'mumtaz mahal' || val === 'mumtaz')) correct = true;
+    if (step === 4 && (val === 'unutma beni' || val === 'unutmabeni')) correct = true;
+    if (step === 5 && (val === 'seni seviyorum')) correct = true;
 
     if (correct) {
       document.getElementById('step' + step).classList.remove('active');
-      if (step < 3) {
+      if (step < 5) {
         document.getElementById('step' + (step + 1)).classList.add('active');
         document.getElementById('ans' + (step + 1)).focus();
       } else {
         document.getElementById('stepSuccess').classList.add('active');
-        setTimeout(() => {
-          document.getElementById('puzzleOverlay').classList.remove('active');
-          document.getElementById('envelope').classList.add('open');
-        }, 1800);
+        setTimeout(explodeStars, 1500);
       }
     } else {
       const box = document.querySelector('.puzzle-box');
@@ -393,8 +343,28 @@
     }
   }
 
-  // Enter key support
-  [1, 2, 3].forEach(i => {
+  function explodeStars() {
+    document.getElementById('puzzleOverlay').classList.remove('active');
+    document.getElementById('centerStar').style.display = 'none';
+    
+    // Yulduzlarni atrofga tarqib yuborish
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(s => {
+      s.style.transition = 'all 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      let moveX = (Math.random() - 0.5) * 3000;
+      let moveY = (Math.random() - 0.5) * 3000;
+      s.style.transform = `translate(${moveX}px, ${moveY}px) scale(3)`;
+      s.style.opacity = '0';
+    });
+
+    // Yakuniy kontentni chiqarish
+    setTimeout(() => {
+      document.getElementById('finalContent').classList.add('show');
+    }, 1800);
+  }
+
+  // Enter tugmasi ishlashi
+  [1, 2, 3, 4, 5].forEach(i => {
     document.getElementById('ans' + i).addEventListener('keypress', function (e) {
       if (e.key === 'Enter') checkAnswer(i);
     });
